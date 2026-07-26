@@ -18,7 +18,7 @@ resource "azurerm_resource_group" "mama1" {
 }
 
 resource "azurerm_storage_account" "mama" {
-  name                     = "storage989unt10854509n"
+  name                     = "storage989unt10854509n1"
   resource_group_name      = azurerm_resource_group.mama.name
   location                 = azurerm_resource_group.mama.location
   account_tier             = "Standard"
