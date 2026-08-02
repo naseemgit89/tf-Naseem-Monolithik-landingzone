@@ -12,8 +12,8 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "mama1" {
-  name     = "rg-dev"
+resource "azurerm_resource_group" "mama3" {
+  name     = "rg-dev3"
   location = "East US"
 }
 
