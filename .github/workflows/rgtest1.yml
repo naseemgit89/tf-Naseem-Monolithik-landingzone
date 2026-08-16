@@ -1,3 +1,4 @@
+```yaml
 name: Terraform Azure Deployment
 
 on:
@@ -17,7 +18,10 @@ permissions:
 jobs:
   terraform:
     name: Terraform Deployment
-    runs-on: [self-hosted, windows, x64]
+    runs-on:
+      - self-hosted
+      - windows
+      - x64
 
     defaults:
       run:
@@ -25,16 +29,9 @@ jobs:
         working-directory: .
 
     steps:
-
-      # --------------------------------------------------
-      # 1. Checkout Repository
-      # --------------------------------------------------
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # --------------------------------------------------
-      # 2. Login to Azure using OIDC
-      # --------------------------------------------------
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -42,88 +39,42 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # --------------------------------------------------
-      # 3. Verify Azure Login
-      # --------------------------------------------------
       - name: Check Azure Account
         run: |
-          Write-Host "======================================"
-          Write-Host "        AZURE ACCOUNT INFORMATION"
-          Write-Host "======================================"
-
+          Write-Host "AZURE ACCOUNT"
           az account show --output table
 
-      # --------------------------------------------------
-      # 4. Check Terraform Installation
-      # --------------------------------------------------
       - name: Check Terraform
         run: |
-          Write-Host "======================================"
-          Write-Host "        TERRAFORM INFORMATION"
-          Write-Host "======================================"
-
-          Write-Host "`nTerraform Location:"
+          Write-Host "TERRAFORM PATH"
           where.exe terraform
-
-          Write-Host "`nTerraform Version:"
+          Write-Host "TERRAFORM VERSION"
           terraform version
 
-      # --------------------------------------------------
-      # 5. Check Terraform Files
-      # --------------------------------------------------
       - name: Check Terraform Files
         run: |
-          Write-Host "======================================"
-          Write-Host "        TERRAFORM FILES"
-          Write-Host "======================================"
-
-          Write-Host "`nCurrent Directory:"
+          Write-Host "CURRENT DIRECTORY"
           Get-Location
-
-          Write-Host "`nTerraform Files:"
+          Write-Host "TERRAFORM FILES"
           Get-ChildItem -Path . -Filter *.tf
 
-      # --------------------------------------------------
-      # 6. Terraform Init
-      # --------------------------------------------------
       - name: Terraform Init
         run: |
-          Write-Host "======================================"
-          Write-Host "        TERRAFORM INIT"
-          Write-Host "======================================"
-
+          Write-Host "TERRAFORM INIT"
           terraform init
 
-      # --------------------------------------------------
-      # 7. Terraform Validate
-      # --------------------------------------------------
       - name: Terraform Validate
         run: |
-          Write-Host "======================================"
-          Write-Host "        TERRAFORM VALIDATE"
-          Write-Host "======================================"
-
+          Write-Host "TERRAFORM VALIDATE"
           terraform validate
 
-      # --------------------------------------------------
-      # 8. Terraform Plan
-      # --------------------------------------------------
       - name: Terraform Plan
         run: |
-          Write-Host "======================================"
-          Write-Host "        TERRAFORM PLAN"
-          Write-Host "======================================"
-
+          Write-Host "TERRAFORM PLAN"
           terraform plan -no-color
 
-      # --------------------------------------------------
-      # 9. Terraform Apply
-      # --------------------------------------------------
       - name: Terraform Apply
         run: |
-          Write-Host "======================================"
-          Write-Host "        TERRAFORM APPLY"
-          Write-Host "======================================"
-
+          Write-Host "TERRAFORM APPLY"
           terraform apply -auto-approve
 ```
