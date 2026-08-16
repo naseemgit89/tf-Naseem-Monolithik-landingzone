@@ -1,0 +1,24 @@
+name: Terraform - Create Resource Group
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: [self-hosted, mypc_runner]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check Terraform Version
+        run: terraform version
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
