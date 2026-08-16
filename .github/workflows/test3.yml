@@ -12,7 +12,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   terraform:
@@ -31,15 +30,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Check Azure Account
+      - name: Check Azure CLI
         run: |
+          Write-Host "AZURE CLI VERSION"
+          az version
+
+      - name: Check Azure Login
+        run: |
+          Write-Host "CURRENT WINDOWS USER"
+          whoami
+
           Write-Host "AZURE ACCOUNT"
           az account show --output table
 
@@ -47,6 +47,7 @@ jobs:
         run: |
           Write-Host "TERRAFORM PATH"
           where.exe terraform
+
           Write-Host "TERRAFORM VERSION"
           terraform version
 
@@ -54,6 +55,7 @@ jobs:
         run: |
           Write-Host "CURRENT DIRECTORY"
           Get-Location
+
           Write-Host "TERRAFORM FILES"
           Get-ChildItem -Path . -Filter *.tf
 
@@ -73,6 +75,7 @@ jobs:
           terraform plan -no-color
 
       - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           Write-Host "TERRAFORM APPLY"
           terraform apply -auto-approve
